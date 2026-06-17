@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* ─── Design System Tokens ───────────────────────────────────────────────── */
+
+@theme inline {
+  --color-background: #0F172A;
+  --color-foreground: #F8FAFC;
+  --color-card: #1E293B;
+  --color-border: #334155;
+  --color-muted: #CBD5E1;
+  --color-accent: #3B82F6;
+  --color-success: #22C55E;
+  --font-sans: var(--font-inter);
+  --font-sora: var(--font-sora-var);
+}
+
+/* ─── Base Styles ────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background-color: #0F172A;
+  color: #F8FAFC;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Font Classes ───────────────────────────────────────────────────────── */
+
+.font-sora {
+  font-family: var(--font-sora), system-ui, sans-serif;
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #F8FAFC;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ─── Section spacing ────────────────────────────────────────────────────── */
+
+section {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+/* ─── Floating background keyframes (for Tailwind arbitrary animations) ─── */
+
+@keyframes float-1 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(80px, 40px); }
+  50% { transform: translate(40px, 80px); }
+  75% { transform: translate(-30px, 50px); }
+}
+
+@keyframes float-2 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-60px, -30px); }
+  50% { transform: translate(-30px, -70px); }
+  75% { transform: translate(40px, -40px); }
+}
+
+@keyframes float-3 {
+  0%, 100% { transform: translate(-50%, 0); }
+  25% { transform: translate(-40%, -40px); }
+  50% { transform: translate(-60%, 30px); }
+  75% { transform: translate(-45%, -20px); }
+}
+
+@keyframes float-4 {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-50px, 60px); }
+  50% { transform: translate(30px, 40px); }
+  75% { transform: translate(-20px, -30px); }
+}
