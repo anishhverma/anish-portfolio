@@ -3,7 +3,7 @@ import CursorSpotlight from "@/components/CursorSpotlight";
 import FloatingBackground from "@/components/FloatingBackground";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import About from "@/components/About";
+
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import CaseStudies from "@/components/CaseStudies";
@@ -26,7 +26,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="relative z-10">
         <Hero />
-        <About />
+
         <Skills />
         <Experience />
         <CaseStudies />
