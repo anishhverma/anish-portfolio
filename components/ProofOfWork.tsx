@@ -1,471 +1,306 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
-import ScreenshotGallery from "./ScreenshotGallery";
-
-/* ─── Types ────────────────────────────────────────────────────────────────── */
-
-interface MetricItem {
-  value: string;
-  label: string;
-  color?: "blue" | "green" | "amber";
-}
-
-interface CaseStudyData {
-  id: string;
-  client: string;
-  icon: string;
-  role: string;
-  period: string;
-  challenge: string;
-  strategy: string[];
-  metrics: MetricItem[];
-  gallery: { src: string; alt: string; caption?: string }[];
-  platforms: string[];
-}
-
-/* ─── Data ─────────────────────────────────────────────────────────────────── */
+import PhoneMockup from "./mockups/PhoneMockup";
+import BrowserMockup from "./mockups/BrowserMockup";
 
 const basePath = "/anish-portfolio";
 
-const caseStudiesData: CaseStudyData[] = [
-  {
-    id: "sarthak",
-    client: "Sarthak Goswami — Feline Media",
-    icon: "🎬",
-    role: "Growth Associate & Social Media Strategist",
-    period: "Current",
-    challenge:
-      "Scale Sarthak Goswami's creator brand across YouTube, Instagram, Facebook, and X — growing from a strong YouTube base into a cross-platform media powerhouse with measurable engagement and audience retention.",
-    strategy: [
-      "Built a content repurposing engine: Long-form → Reels/Shorts with optimized hooks, pacing, and narrative arcs",
-      "Developed standalone short-form content (on-ground coverage, protest content, trend-jacking) that consistently went viral",
-      "Created week-on-week analytics dashboards tracking views, retention, CTR, subscriber conversion, and traffic sources",
-      "Managed multi-platform distribution across YouTube, Instagram, Facebook, and X with platform-native optimization",
-      "A/B tested thumbnails, titles, and posting schedules to maximize algorithmic reach",
-    ],
-    metrics: [
-      { value: "15.5M", label: "Views on a Single Reel", color: "blue" },
-      { value: "923K", label: "Views on One Long-form Video", color: "blue" },
-      { value: "165K hrs", label: "Watch Time Generated", color: "green" },
-      { value: "7.1%", label: "Click-Through Rate", color: "green" },
-      { value: "34.3%", label: "Audience Retention Rate", color: "amber" },
-      { value: "126K", label: "Impressions on X Post", color: "amber" },
-    ],
-    gallery: [
-      {
-        src: `${basePath}/portfolio/sarthak/cjp-leverage.png`,
-        alt: "Viral reels grid",
-        caption:
-          "Standalone short-form content — 15.5M, 4.1M, 3.5M, 1.9M views",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/react-repurpose.png`,
-        alt: "React repurpose content",
-        caption: "Repurposed React content — 2.8M, 2.3M, 1M+ views",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/xplain-repurpose.png`,
-        alt: "Explainer repurpose content",
-        caption: "Repurposed Xplain content — 3.9M, 1.3M, 1.1M views",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/yt-analytics.png`,
-        alt: "YouTube Studio analytics",
-        caption: "YT Analytics — 923K views, 165K watch hrs, +3.1K subs",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/viral-shorts.png`,
-        alt: "Viral shorts compilation",
-        caption:
-          "On-ground viral coverage — 1.4M, 692K, 644K, 404K, 330K views",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/fb-reels.png`,
-        alt: "Facebook reels performance",
-        caption: "Facebook reels — 3.9M, 1.9M, 275K views",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/x-post.png`,
-        alt: "X/Twitter viral post",
-        caption: "X post — 126K impressions, 590 retweets, 4.6K likes",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/planning.png`,
-        alt: "Week-on-week analytics",
-        caption:
-          "Analytics dashboard — retention, CTR, traffic source tracking",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/yt-channel.png`,
-        alt: "YouTube channel overview",
-        caption: "Channel performance overview",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/yt-reacts.png`,
-        alt: "Sarthak Reacts channel",
-        caption: "Sarthak Reacts — secondary channel management",
-      },
-      {
-        src: `${basePath}/portfolio/sarthak/yt-docs.png`,
-        alt: "Documentary content",
-        caption: "Long-form documentary content analytics",
-      },
-    ],
-    platforms: ["YouTube", "Instagram", "Facebook", "X"],
-  },
-  {
-    id: "my-indian-things",
-    client: "My Indian Things",
-    icon: "🏠",
-    role: "Social Media & Content Manager",
-    period: "Internship",
-    challenge:
-      "Build a cohesive Instagram presence for an Indian home décor and wallpaper brand — creating engaging product showcases, festival content, and meme marketing to drive brand awareness and customer engagement.",
-    strategy: [
-      "Designed a consistent visual grid strategy with branded product mockups and lifestyle photography",
-      "Created festival-themed posts (Janmashtami, Dhanteras, Bhai Dooj, Diwali) to tap into seasonal engagement spikes",
-      "Developed meme content and relatable posts to humanize the brand and boost shareability",
-      "Managed full Instagram content calendar including reels, carousels, and static posts",
-    ],
-    metrics: [
-      { value: "100+", label: "Posts Created & Published", color: "blue" },
-      { value: "Full Grid", label: "Instagram Presence Built", color: "green" },
-      {
-        value: "Multi-format",
-        label: "Reels, Carousels & Stories",
-        color: "amber",
-      },
-    ],
-    gallery: [
-      {
-        src: `${basePath}/portfolio/my-indian-things/grid-1.png`,
-        alt: "Instagram grid 1",
-        caption: "Product showcases, festival posts, and branded content",
-      },
-      {
-        src: `${basePath}/portfolio/my-indian-things/grid-2.png`,
-        alt: "Instagram grid 2",
-        caption: "Reels, carousels, and engagement-driven content",
-      },
-      {
-        src: `${basePath}/portfolio/my-indian-things/grid-3.png`,
-        alt: "Instagram grid 3",
-        caption: "Festival campaigns, memes, and trend-based content",
-      },
-    ],
-    platforms: ["Instagram", "Facebook"],
-  },
-  {
-    id: "uptown-media",
-    client: "Uptown Media",
-    icon: "🏢",
-    role: "Founder & Creative Director",
-    period: "Entrepreneurship",
-    challenge:
-      "Build and run a creative services agency from scratch — acquiring clients, managing a network of freelancers, and delivering end-to-end digital and print projects.",
-    strategy: [
-      "Acquired clients through cold outreach, networking, and referrals",
-      "Built a network of freelance designers, editors, and content creators",
-      "Delivered carousel designs, standee graphics, print catalogs, and YouTube video editing",
-      "Managed full project lifecycle from discovery calls to final handoff",
-    ],
-    metrics: [
-      { value: "Multiple", label: "Clients Served", color: "blue" },
-      { value: "Print + Digital", label: "Project Types", color: "green" },
-      { value: "End-to-End", label: "Project Management", color: "amber" },
-    ],
-    gallery: [
-      {
-        src: `${basePath}/portfolio/uptown-media/standee-1.png`,
-        alt: "Standee design 1",
-        caption: "Print standee design for client",
-      },
-      {
-        src: `${basePath}/portfolio/uptown-media/standee-2.png`,
-        alt: "Standee design 2",
-        caption: "Print standee design",
-      },
-      {
-        src: `${basePath}/portfolio/uptown-media/carousel-1.png`,
-        alt: "Carousel design",
-        caption: "Social media carousel design",
-      },
-      {
-        src: `${basePath}/portfolio/uptown-media/carousel-2.png`,
-        alt: "Carousel design 2",
-        caption: "Social media carousel design",
-      },
-      {
-        src: `${basePath}/portfolio/uptown-media/social-media.png`,
-        alt: "Social media content",
-        caption: "Social media content management",
-      },
-    ],
-    platforms: ["Instagram", "Print", "YouTube"],
-  },
-  {
-    id: "astroport",
-    client: "Astroport India",
-    icon: "🌌",
-    role: "Social Media & Marketing Intern",
-    period: "Internship",
-    challenge:
-      "Create compelling social media creatives for a unique stargazing resort brand, building awareness and driving booking inquiries across multiple locations.",
-    strategy: [
-      "Designed ad creatives and promotional posts highlighting the resort experience",
-      "Created event-based content for Tourism Day, Women's Day, and seasonal campaigns",
-      "Wrote marketing copy aligned with the brand's adventure-luxury positioning",
-      "Assisted in running paid campaigns to increase inquiries",
-    ],
-    metrics: [
-      { value: "Multi-location", label: "Brand Managed", color: "blue" },
-      {
-        value: "Ad Creatives",
-        label: "Campaign Assets Created",
-        color: "green",
-      },
-      { value: "Paid + Organic", label: "Campaign Types", color: "amber" },
-    ],
-    gallery: [
-      {
-        src: `${basePath}/portfolio/astroport/ad-post.jpg`,
-        alt: "Astroport ad creative",
-        caption: "Promotional ad creative for hotel transformation",
-      },
-      {
-        src: `${basePath}/portfolio/astroport/blanket-stars.jpg`,
-        alt: "Blanket of Stars post",
-        caption: "Stargazing experience content post",
-      },
-      {
-        src: `${basePath}/portfolio/astroport/bucket-list.jpg`,
-        alt: "Bucket list post",
-        caption: "Travel bucket list engagement content",
-      },
-      {
-        src: `${basePath}/portfolio/astroport/women-day.jpg`,
-        alt: "Women's Day post",
-        caption: "Women's Day campaign creative",
-      },
-      {
-        src: `${basePath}/portfolio/astroport/tourism-day.jpg`,
-        alt: "Tourism Day post",
-        caption: "National Tourism Day creative",
-      },
-    ],
-    platforms: ["Instagram", "Facebook"],
-  },
-];
-
-/* ─── Color Helpers ────────────────────────────────────────────────────────── */
-
-const colorMap = {
-  blue: {
-    bg: "bg-blue-500/10",
-    border: "border-blue-500/30",
-    text: "text-blue-400",
-    glow: "shadow-blue-500/20",
-  },
-  green: {
-    bg: "bg-emerald-500/10",
-    border: "border-emerald-500/30",
-    text: "text-emerald-400",
-    glow: "shadow-emerald-500/20",
-  },
-  amber: {
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/30",
-    text: "text-amber-400",
-    glow: "shadow-amber-500/20",
-  },
-};
-
-/* ─── Component ────────────────────────────────────────────────────────────── */
-
 export default function ProofOfWork() {
-  const [expandedId, setExpandedId] = useState<string>("sarthak");
-
   return (
-    <section id="proof-of-work" className="relative px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+    <section id="proof-of-work" className="relative bg-slate-950 px-4 py-24 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-slate-950" />
+      
+      <div className="relative mx-auto max-w-7xl space-y-32">
+        
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut" as const }}
-          className="mb-16 text-center"
+          viewport={{ once: true }}
+          className="text-center"
         >
-          <h2 className="font-sora mb-4 text-3xl font-bold tracking-tight text-slate-50 sm:text-4xl">
-            Proof of Work
+          <h2 className="font-sora text-5xl font-extrabold tracking-tight text-white sm:text-7xl">
+            notable <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 italic">Projects</span>
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-slate-400">
-            Real results from real clients. Screenshots, analytics, and metrics
-            — not just claims.
+          <p className="mt-4 text-xl text-slate-400">
+            Real data, real results.
           </p>
         </motion.div>
 
-        {/* Case Studies */}
-        <div className="space-y-8">
-          {caseStudiesData.map((study, idx) => (
-            <motion.div
-              key={study.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{
-                duration: 0.5,
-                delay: idx * 0.1,
-                ease: "easeOut" as const,
-              }}
-              className="overflow-hidden rounded-2xl border border-slate-700/50 bg-slate-800/30 backdrop-blur-sm"
-            >
-              {/* Header — always visible */}
-              <button
-                onClick={() =>
-                  setExpandedId(expandedId === study.id ? "" : study.id)
-                }
-                className="flex w-full items-center justify-between p-6 text-left transition-colors hover:bg-slate-800/50 sm:p-8"
+        {/* =========================================
+            SECTION 1: SARTHAK (Dark / Hero / Overlapping)
+            Reference: download (13).png
+            ========================================= */}
+        <div className="relative rounded-[2.5rem] bg-slate-900 border border-slate-800 p-8 sm:p-12 lg:p-16 overflow-hidden">
+          {/* Subtle grid background */}
+          <div className="absolute inset-0 bg-[url('/anish-portfolio/grid.svg')] opacity-5" />
+
+          <div className="relative grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            {/* Left: Text & Metrics */}
+            <div className="space-y-8 z-10">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
               >
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl">{study.icon}</span>
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-4xl">🎬</span>
+                  <h3 className="font-sora text-3xl font-bold text-white sm:text-4xl">
+                    Sarthak Goswami
+                  </h3>
+                </div>
+                <p className="text-xl text-blue-400 font-medium mb-4">Growth Associate & Social Media Strategist</p>
+                <p className="text-slate-300 leading-relaxed max-w-lg">
+                  Scaled Sarthak Goswami's creator brand across YouTube, Instagram, Facebook, and X. Built a content repurposing engine and developed standalone viral short-form content.
+                </p>
+              </motion.div>
+
+              {/* Floating Metric Bento */}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="grid grid-cols-2 gap-4"
+              >
+                <div className="bg-slate-950 rounded-3xl p-6 border border-slate-800 shadow-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span className="text-6xl font-bold text-blue-500">↗</span>
+                  </div>
+                  <p className="text-4xl font-black text-white mb-2 tracking-tight">15.5M<span className="text-green-500 text-3xl ml-1">↑</span></p>
+                  <p className="text-sm text-slate-400 font-medium uppercase tracking-wider">Views on Single Reel</p>
+                </div>
+                <div className="bg-slate-950 rounded-3xl p-6 border border-slate-800 shadow-2xl relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <span className="text-6xl font-bold text-emerald-500">↗</span>
+                  </div>
+                  <p className="text-4xl font-black text-white mb-2 tracking-tight">923K<span className="text-green-500 text-3xl ml-1">↑</span></p>
+                  <p className="text-sm text-slate-400 font-medium uppercase tracking-wider">Long-form Views</p>
+                </div>
+                <div className="bg-slate-950 rounded-3xl p-6 border border-slate-800 shadow-2xl col-span-2 relative overflow-hidden flex items-center justify-between">
                   <div>
-                    <h3 className="font-sora text-xl font-semibold text-slate-50 sm:text-2xl">
-                      {study.client}
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-400">
-                      {study.role}
-                      <span className="ml-3 inline-flex items-center rounded-full border border-slate-600 px-2 py-0.5 text-xs text-slate-300">
-                        {study.period}
-                      </span>
-                    </p>
+                    <p className="text-3xl font-black text-white mb-1 tracking-tight">34.3%<span className="text-green-500 text-2xl ml-1">↑</span></p>
+                    <p className="text-sm text-slate-400 font-medium uppercase tracking-wider">Audience Retention</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-black text-white mb-1 tracking-tight">126K<span className="text-amber-500 text-2xl ml-1">↑</span></p>
+                    <p className="text-sm text-slate-400 font-medium uppercase tracking-wider">X Impressions</p>
                   </div>
                 </div>
-                {/* Platform badges */}
-                <div className="hidden items-center gap-2 sm:flex">
-                  {study.platforms.map((p) => (
-                    <span
-                      key={p}
-                      className="rounded-full bg-slate-700/50 px-3 py-1 text-xs text-slate-300"
-                    >
-                      {p}
-                    </span>
-                  ))}
-                  <svg
-                    className={`ml-2 h-5 w-5 text-slate-400 transition-transform duration-300 ${
-                      expandedId === study.id ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </div>
-              </button>
+              </motion.div>
+            </div>
 
-              {/* Expandable Content */}
-              {expandedId === study.id && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  transition={{ duration: 0.4, ease: "easeOut" as const }}
-                  className="border-t border-slate-700/50"
-                >
-                  <div className="space-y-8 p-6 sm:p-8">
-                    {/* Challenge & Strategy */}
-                    <div className="grid gap-6 lg:grid-cols-2">
-                      {/* Challenge */}
-                      <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 p-5">
-                        <h4 className="font-sora mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-blue-400">
-                          <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-                          The Challenge
-                        </h4>
-                        <p className="text-sm leading-relaxed text-slate-300">
-                          {study.challenge}
-                        </p>
-                      </div>
-
-                      {/* Strategy */}
-                      <div className="rounded-xl border border-slate-700/50 bg-slate-900/50 p-5">
-                        <h4 className="font-sora mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-emerald-400">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                          The Strategy
-                        </h4>
-                        <ul className="space-y-2">
-                          {study.strategy.map((s, i) => (
-                            <li
-                              key={i}
-                              className="flex items-start gap-2 text-sm text-slate-300"
-                            >
-                              <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-slate-500" />
-                              {s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    {/* Metrics */}
-                    <div>
-                      <h4 className="font-sora mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-                        Key Results
-                      </h4>
-                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-                        {study.metrics.map((metric, i) => {
-                          const colors =
-                            colorMap[metric.color || "blue"];
-                          return (
-                            <motion.div
-                              key={i}
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              viewport={{ once: true }}
-                              transition={{
-                                duration: 0.3,
-                                delay: i * 0.05,
-                              }}
-                              className={`rounded-xl border ${colors.border} ${colors.bg} p-4 text-center shadow-lg ${colors.glow}`}
-                            >
-                              <p
-                                className={`font-sora text-xl font-bold ${colors.text} sm:text-2xl`}
-                              >
-                                {metric.value}
-                              </p>
-                              <p className="mt-1 text-xs text-slate-400">
-                                {metric.label}
-                              </p>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Screenshot Gallery */}
-                    <div>
-                      <h4 className="font-sora mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-slate-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
-                        Evidence — Click to Expand
-                      </h4>
-                      <ScreenshotGallery
-                        images={study.gallery}
-                        columns={study.gallery.length <= 5 ? 3 : 3}
-                      />
-                    </div>
-                  </div>
-                </motion.div>
-              )}
+            {/* Right: Overlapping Mockups */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative h-[600px] lg:h-[700px] w-full"
+            >
+              <div className="absolute top-0 right-0 w-[90%] z-10 shadow-2xl hover:z-30 transition-all duration-300 hover:scale-105">
+                <BrowserMockup 
+                  src={`${basePath}/portfolio/sarthak/planning.png`} 
+                  alt="Analytics Dashboard" 
+                  aspectRatio="aspect-[16/10]"
+                />
+              </div>
+              <div className="absolute bottom-10 left-0 z-20 shadow-2xl hover:z-30 transition-all duration-300 hover:scale-105 origin-bottom-left">
+                <PhoneMockup 
+                  src={`${basePath}/portfolio/sarthak/cjp-leverage.png`} 
+                  alt="Viral Reels" 
+                  className="w-[240px] sm:w-[260px]"
+                />
+              </div>
+              <div className="absolute bottom-0 right-10 z-20 shadow-2xl hover:z-30 transition-all duration-300 hover:scale-105 origin-bottom-right">
+                <PhoneMockup 
+                  src={`${basePath}/portfolio/sarthak/x-post.png`} 
+                  alt="X Viral Post" 
+                  className="w-[220px] sm:w-[240px]"
+                />
+              </div>
             </motion.div>
-          ))}
+          </div>
         </div>
+
+        {/* =========================================
+            SECTION 2 & 3: BENTO BOX STYLE (Light/Grey layout)
+            Reference: download (4).png & download (7).png
+            ========================================= */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          
+          {/* MY INDIAN THINGS */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="rounded-[2.5rem] bg-slate-100 p-8 sm:p-12 overflow-hidden relative"
+          >
+            {/* Soft glow behind phone */}
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50" />
+            
+            <div className="relative z-10 space-y-8">
+              <div>
+                <h3 className="font-sora text-3xl font-bold text-slate-900 mb-2">My Indian Things</h3>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full border border-slate-300 text-xs font-medium text-slate-600 bg-white/50 backdrop-blur-sm">Social Media Strategy</span>
+                  <span className="px-3 py-1 rounded-full border border-slate-300 text-xs font-medium text-slate-600 bg-white/50 backdrop-blur-sm">Brand Management</span>
+                </div>
+              </div>
+
+              {/* Bento Items */}
+              <div className="space-y-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex gap-4 items-start">
+                  <div className="bg-blue-100 p-3 rounded-xl text-blue-600">📱</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Grid Strategy</h4>
+                    <p className="text-sm text-slate-600 mt-1">Designed consistent visual grid with branded mockups.</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex gap-4 items-start">
+                  <div className="bg-amber-100 p-3 rounded-xl text-amber-600">🎉</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Festival Campaigns</h4>
+                    <p className="text-sm text-slate-600 mt-1">Created themed posts to tap into seasonal engagement.</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex items-center justify-between">
+                  <div>
+                    <p className="text-3xl font-black text-slate-900">100+</p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Posts Published</p>
+                  </div>
+                  <div className="h-12 w-px bg-slate-200"></div>
+                  <div>
+                    <p className="text-3xl font-black text-slate-900 flex items-center">Full <span className="text-green-500 ml-1 text-2xl">✓</span></p>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">Grid Presence</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mockup */}
+              <div className="mt-8 flex justify-center pb-8">
+                <div className="relative group perspective-1000">
+                  <motion.div whileHover={{ rotateY: -5, rotateX: 5 }} className="transition-transform duration-500 ease-out">
+                    <PhoneMockup src={`${basePath}/portfolio/my-indian-things/grid-1.png`} alt="Instagram Grid" className="shadow-2xl" />
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* ASTROPORT */}
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="rounded-[2.5rem] bg-indigo-50 p-8 sm:p-12 overflow-hidden relative"
+          >
+            {/* Soft glow behind phone */}
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50" />
+            
+            <div className="relative z-10 space-y-8">
+              <div>
+                <h3 className="font-sora text-3xl font-bold text-slate-900 mb-2">Astroport India</h3>
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 rounded-full border border-indigo-200 text-xs font-medium text-indigo-700 bg-white/50 backdrop-blur-sm">Creative Campaign</span>
+                  <span className="px-3 py-1 rounded-full border border-indigo-200 text-xs font-medium text-indigo-700 bg-white/50 backdrop-blur-sm">Ad Strategy</span>
+                </div>
+              </div>
+
+              {/* Bento Items */}
+              <div className="space-y-4">
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-indigo-100 flex gap-4 items-start">
+                  <div className="bg-indigo-100 p-3 rounded-xl text-indigo-600">✨</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Campaign Creatives</h4>
+                    <p className="text-sm text-slate-600 mt-1">Designed ad creatives for stargazing resort awareness.</p>
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-indigo-100 flex gap-4 items-start">
+                  <div className="bg-emerald-100 p-3 rounded-xl text-emerald-600">🎯</div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Event Marketing</h4>
+                    <p className="text-sm text-slate-600 mt-1">Tourism Day & Women's Day engagement content.</p>
+                  </div>
+                </div>
+                <div className="bg-indigo-600 rounded-2xl p-6 shadow-lg text-white flex items-center justify-between relative overflow-hidden">
+                  <div className="absolute -right-4 -top-4 w-24 h-24 bg-white opacity-10 rounded-full blur-xl"></div>
+                  <div>
+                    <p className="text-3xl font-black">Multi</p>
+                    <p className="text-xs font-bold text-indigo-200 uppercase tracking-wide">Location Brand</p>
+                  </div>
+                  <div className="h-12 w-px bg-indigo-500"></div>
+                  <div>
+                    <p className="text-3xl font-black flex items-center">Ads <span className="text-amber-400 ml-1 text-xl">★</span></p>
+                    <p className="text-xs font-bold text-indigo-200 uppercase tracking-wide">Paid Campaigns</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mockup */}
+              <div className="mt-8 flex justify-center pb-8">
+                 <div className="relative group perspective-1000">
+                  <motion.div whileHover={{ rotateY: 5, rotateX: 5 }} className="transition-transform duration-500 ease-out">
+                    <PhoneMockup src={`${basePath}/portfolio/astroport/ad-post.jpg`} alt="Astroport Ad" className="shadow-2xl" />
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+
+        {/* =========================================
+            SECTION 4: UPTOWN MEDIA (Horizontal Browser Style)
+            ========================================= */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="rounded-[2.5rem] bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 p-8 sm:p-12 lg:p-16 relative overflow-hidden"
+        >
+           <div className="absolute inset-0 bg-[url('/anish-portfolio/grid.svg')] opacity-10" />
+           
+           <div className="relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+             
+             {/* Left Text */}
+             <div className="lg:col-span-5 space-y-8">
+                <div>
+                  <h3 className="font-sora text-3xl font-bold text-white mb-2">Uptown Media</h3>
+                  <p className="text-emerald-400 font-medium">Founder & Creative Director</p>
+                </div>
+                
+                <p className="text-slate-300 leading-relaxed">
+                  Built and ran a creative services agency delivering end-to-end digital and print projects. Managed a network of freelancers and acquired clients through direct outreach.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-slate-950/50 rounded-2xl p-5 border border-slate-700">
+                     <p className="text-2xl font-black text-white">End-to-End</p>
+                     <p className="text-xs text-slate-400 uppercase tracking-wide mt-1">Project Mgmt</p>
+                  </div>
+                  <div className="bg-slate-950/50 rounded-2xl p-5 border border-slate-700">
+                     <p className="text-2xl font-black text-white">Print+Digi</p>
+                     <p className="text-xs text-slate-400 uppercase tracking-wide mt-1">Assets Delivered</p>
+                  </div>
+                </div>
+             </div>
+
+             {/* Right Browser Mockup */}
+             <div className="lg:col-span-7">
+               <motion.div whileHover={{ scale: 1.02 }} className="transition-transform duration-500">
+                 <BrowserMockup 
+                    src={`${basePath}/portfolio/uptown-media/carousel-1.png`} 
+                    alt="Uptown Media Carousel Design" 
+                    aspectRatio="aspect-video"
+                 />
+               </motion.div>
+             </div>
+
+           </div>
+        </motion.div>
+
       </div>
     </section>
   );
